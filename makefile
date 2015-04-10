@@ -33,11 +33,8 @@ install: build
 	echo -e " \E[33;1m   [ok] \E[0m "
 	echo -e " \E[33;1m        \E[0m "
 
-clean*~:
-	@
-	rm -f *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~  */*/*/*/*/*~  
-
 clean:
 	@
-	make clean*~                                  &&\
+	rm -f *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~  */*/*/*/*/*~  &&\
+	rm -f source/linux/fasm &&\
 	echo -e "\E[33;1m [ok] clean directory \E[0m"
