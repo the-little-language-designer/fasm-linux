@@ -2,6 +2,7 @@
 *#*
 *.bin
 *.exe
-*.ccd
 
-cicada-nymph
+source/linux/fasm
+
+
