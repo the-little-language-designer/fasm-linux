@@ -39,7 +39,7 @@ init_memory:
 	mov	ecx,[memory_setting]
 	shl	ecx,10
 	jnz	allocate_memory
-	mov	ecx, (100 * 1024 * 1024)
+	mov	ecx, (500 * 1024 * 1024)
       allocate_memory:
 	mov	ebx,[additional_memory]
 	add	ebx,ecx
