@@ -5194,11 +5194,64 @@ And for the similar reason I have invented the completely new feature - the VIRT
 The output of flat assembler was by default just the plain binary, as it was the most convenient for OS programming and allowed to create .COM programs as well. But I have soon added also the option to output relocatable format, which I have designed for my operating system (I have removed this feature before the official releases). However the output format was not selected with command line switch, but with a directive - this was an idea completely different from what other assemblers offered, the direct consequence of the new principle I came with.
 
 ** Same Source, Same Output
-The problem with command line switches selecting output option in case of low level assembly is that the given code will anyway most probably assemble and execute correctly only when the same output is selected that programmer had in mind when writing this code. Also I remembered many cases when I had a source for TASM written by someone other, and to compile it correctly I had to follow the directions given in the comment at the beginning of source and just rewrite all the command line switches as described there. And my though was: then why don't just make assembler look for such options in the source instead, so nobody will have any problem with recompiling. Thus came the SSSO principle - all the settings that can affect the output of assembler are be selected only from source and source is always enough to generate exactly the file which was intented by programmer. The consequence of SSSO idea was also that no matter what version of fasm (considering ports to different operating systems), it always generated the same output file, so when you have written a DOS program, the Linux version of fasm would still make the same DOS executable from such source.
+   The problem with command line switches selecting output option
+   in case of low level assembly is that
+   the given code will anyway most probably assemble and execute correctly
+   only when the same output is selected
+   that programmer had in mind when writing this code.
 
-Some people seem to dislike the implications of this principle, because all other assemblers and compilers have the command line settings that affect the output (or even the source constants) and this different approach needs to change a bit the way of thinking in some cases (this actually happens in even more areas when programming with flat assembler, and it's the purpose of this text to show the origin and reason for those differences). The SSSO rule became one of the guidelines for the design of flat assembler and I don't plan to put it away.
+   Also I remembered many cases when
+   I had a source for TASM written by someone other,
+   and to compile it correctly
+   I had to follow the directions given in the comment
+   at the beginning of source
+   and just rewrite all the command line switches as described there.
+   And my though was:
+   then why don't just make assembler look for such options in the source instead,
+   so nobody will have any problem with recompiling.
+   Thus came the SSSO principle
+   all the settings that can affect the output of assembler
+   are be selected only from source
+   and source is always enough to generate exactly the file
+   which was intented by programmer.
+   The consequence of SSSO idea was also that
+   no matter what version of fasm
+   (considering ports to different operating systems),
+   it always generated the same output file,
+   so when you have written a DOS program,
+   the Linux version of fasm would
+   still make the same DOS executable from such source.
 
-Nonetheless, it is still possible that the same source file will be assembled differently in other environment, because it may include some other files, and their contents and availability may vary from computer to computer and from system to system. The paths to files need to follow the rules for a given operating system, and what file gets loaded may depend on environment variables also, as flat assembler allows them to be expanded inside the path values. To dispose of this dependency on environment the assembler would have to abandon the file inclusion features. Well, I know of one assembler that did choose this way, but it is not something I could even consider for my assembler. So my rationale is that the system-dependent file paths define what source (composed from perhaps many different files) the assembler will get to finally process, but after that the SSSO principle kicks in.
+   Some people seem to dislike the implications of this principle,
+   because all other assemblers and compilers
+   have the command line settings that
+   affect the output (or even the source constants)
+   and this different approach needs to change a bit
+   the way of thinking in some cases
+   (this actually happens in even more areas when programming with flat assembler,
+   and it's the purpose of this text to show the origin and reason for those differences)
+   The SSSO rule became one of the guidelines for the design of flat assembler
+   and I don't plan to put it away.
+
+   Nonetheless,
+   it is still possible that
+   the same source file will be assembled differently
+   in other environment,
+   because it may include some other files,
+   and their contents and availability may vary
+   from computer to computer
+   and from system to system.
+   The paths to files need to follow the rules for a given operating system,
+   and what file gets loaded may depend on environment variables also,
+   as flat assembler allows them to be expanded inside the path values.
+   To dispose of this dependency on environment
+   the assembler would have to abandon the file inclusion features.
+   Well, I know of one assembler that did choose this way,
+   but it is not something I could even consider for my assembler.
+   So my rationale is that the system-dependent file paths
+   define what source (composed from perhaps many different files)
+   the assembler will get to finally process,
+   but after that the SSSO principle kicks in.
 
 ** Resolving The Code
 There was one more feature of Turbo Assembler I wanted to have in my assembler as well: optimizing the size of displacements with doing multiple passes to resolve which displacements can fit in shorter range and which not. To make this feature possible I had to make labels - which from the programmer's point of view are actually constants - an assembly-time variables, which are constantly updated on each pass to reflect the changes of code due to optimization. And for this reason I had to do processing of structures like IF or REPEAT - which use the expressions that may be dependent on the value of such labels - during those passes, not earlier. Therefore in fasm the IF directive does not affect processing of macroinstructions or other directives interpreted by preprocessor - this may be confusing for people starting to learn the syntax of fasm, but was really necessary to resolve correctly the sources like:

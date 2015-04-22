@@ -29,7 +29,7 @@ install: build
 	@
 	echo -e " \E[33;1m * moving source/linux/fasm to" $(BINDIR) "... \E[0m " &&\
 	cd source/linux/                        &&\
-	install -D -m777 fasm -t "$(BINDIR)"    &&\
+	install -D --mode=775 fasm "$(BINDIR)"    &&\
 	echo -e " \E[33;1m   [ok] \E[0m "
 	echo -e " \E[33;1m        \E[0m "
 
